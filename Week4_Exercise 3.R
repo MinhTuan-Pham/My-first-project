@@ -7,7 +7,7 @@ outcome$State
 
 
 #Function 1
-#datc is data column in each condition
+#datc is data column of disease
 best <- function(state, outcome) {
   dat <- read.csv("outcome-of-care-measures.csv",colClasses = "character")
   locate <- numeric()
@@ -20,18 +20,24 @@ best <- function(state, outcome) {
     stop("invalid outcome")
   }
   
+  colstate <- subset(dat, State == state)
+  
   if (outcome == "heart attack") {
     datc <- 11
   }
-  if (outcome == "heart failure") {
+  else 
+    if (outcome == "heart failure") {
         datc <- 17
-        }
+    }
+  else
   if (outcome == "pneumonia") {
           datc <- 23
   }
-  locate <- which(dat[, datc] == min(dat[, datc], na.rm = TRUE))
-  return(dat[locate,"Hospital.Name"])
+  locate <- which(colstate[, datc] == min(colstate[, datc], na.rm = TRUE))
+  return(colstate[locate,"Hospital.Name"])
 }
 best("AL","heart attack")
 best("TX", "heart attack")
 best("TX", "heart failure")
+best("SC", "heart attack")
+best("NY", "pneumonia")
